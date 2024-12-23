@@ -5,7 +5,7 @@ import { generateTokenAndSetCookie } from "../utils/generateTokenAndSetCookie.js
 import { comparePassword } from "../utils/comparePassword.js";
 import redis from "../config/redis.js";
 
-export const Register = async (req, res, next) => {
+export const Register = async (req, res) => {
   try {
     const { firstName, lastName, email, username, password, profilePic } =
       req.body;
@@ -30,9 +30,12 @@ export const Register = async (req, res, next) => {
     const existingUser = await User.findOne({ email: email });
 
     if (existingUser) {
-      return res.status(400).json("User already exists");
+      return res.status(400).json({message:"User already exists"});
     }
-
+    const existingUsername = await User.findOne({username})
+    if(existingUsername){
+      return res.status(400).json({message: "User already exists"});
+    }
     // Hash password before saving
     const hashedPassword = await hashPassword(password);
 
@@ -54,7 +57,8 @@ export const Register = async (req, res, next) => {
     // Return response with the user data and token
     return res.status(201).json({ user, token });
   } catch (error) {
-    next(error);
+    return res.status(500).json({message: error.message});
+    
   }
 };
 export const Login = async (req, res, next) => {
