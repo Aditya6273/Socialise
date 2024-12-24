@@ -35,7 +35,7 @@ const userSchema = new mongoose.Schema(
     },
     profilePic: {
       type: String,
-      default: "default_profile_pic.jpg",
+      default: "/default_profile_pic.jpeg",
     },
     bondings: [
       {
@@ -63,7 +63,7 @@ const userSchema = new mongoose.Schema(
     ],
     coverImg: {
       type: String,
-      default: "default_cover_img.jpg",
+      default: "/default_cover_img.jpg",
     },
     bio: {
       type: String,

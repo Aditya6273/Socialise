@@ -7,7 +7,6 @@ import "tailwindcss/tailwind.css";
 import { Link } from "react-router-dom";
 import { useUserStore } from "@/Stores/useUserStore";
 
-
 const Register = () => {
   const [formData, setFormData] = useState({
     firstName: "",
@@ -16,6 +15,10 @@ const Register = () => {
     password: "",
     email: "",
   });
+  
+  const [error, setError] = useState(null);
+
+  const { signup, isLoading } = useUserStore();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -24,28 +27,32 @@ const Register = () => {
       [name]: value,
     });
   };
-  const { signup, isLoading } = useUserStore();
+
   const handleSubmit = async (e) => {
-  e.preventDefault();
-    await signup(formData);
-   
+    e.preventDefault();
+    setError(null); // Reset any previous error
+    try {
+      const user = await signup(formData);
+      if (user) {
+        window.location.reload();
+         // Navigate to the home page upon successful registration
+      }
+    } catch (err) {
+      setError("Failed to register. Please try again.",err); // Handle registration errors
+    }
   };
 
   return (
     <div className="flex items-center justify-center min-h-screen">
-      <Card className="w-full border-none max-w-md outline-none bg-opacity-50">
+      <Card className="w-full border-none max-w-md bg-transparent outline-none bg-opacity-50">
         <CardHeader>
-          <CardTitle className="text-2xl font-bold text-center">
-            Register
-          </CardTitle>
+          <CardTitle className="text-4xl font-bold text-center">Register To Socialise</CardTitle>
         </CardHeader>
         <div className="p-4">
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} >
             <div className="flex flex-wrap gap-3">
               <div className="mb-4 flex-1 flex-grow">
-                <Label htmlFor="firstName" className="text-sm">
-                  First Name
-                </Label>
+                <Label htmlFor="firstName" className="text-sm">First Name</Label>
                 <Input
                   autoComplete="off"
                   id="firstName"
@@ -58,9 +65,7 @@ const Register = () => {
                 />
               </div>
               <div className="mb-4 flex-1">
-                <Label htmlFor="lastName" className="text-sm">
-                  Last Name
-                </Label>
+                <Label htmlFor="lastName" className="text-sm">Last Name</Label>
                 <Input
                   autoComplete="off"
                   id="lastName"
@@ -73,10 +78,8 @@ const Register = () => {
                 />
               </div>
             </div>
-            <div className="mb-4">
-              <Label htmlFor="username" className="text-sm">
-                Username
-              </Label>
+            <div className="mb-4 flex-grow">
+              <Label htmlFor="username" className="text-sm">Username</Label>
               <Input
                 autoComplete="off"
                 id="username"
@@ -89,9 +92,7 @@ const Register = () => {
               />
             </div>
             <div className="mb-4">
-              <Label htmlFor="email" className="text-sm">
-                Email
-              </Label>
+              <Label htmlFor="email" className="text-sm">Email</Label>
               <Input
                 autoComplete="off"
                 id="email"
@@ -104,9 +105,7 @@ const Register = () => {
               />
             </div>
             <div className="mb-4">
-              <Label htmlFor="password" className="text-sm max-w-2xl">
-                Password
-              </Label>
+              <Label htmlFor="password" className="text-sm max-w-2xl">Password</Label>
               <Input
                 autoComplete="off"
                 id="password"
@@ -118,10 +117,13 @@ const Register = () => {
                 className="w-full"
               />
             </div>
+            {error && (
+              <p className="text-sm text-red-500 mb-2">{error}</p>
+            )}
             <Button
               type="submit"
               disabled={isLoading}
-              className="mt-4 flex-1 w-full bg-blue-500 hover:bg-blue-600 text-white"
+              className="mt-4 w-full mx-auto bg-blue-500 hover:bg-blue-600 text-white"
             >
               {isLoading ? "Registering..." : "Register"}
             </Button>
