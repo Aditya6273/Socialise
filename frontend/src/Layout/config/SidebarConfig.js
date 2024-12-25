@@ -1,4 +1,4 @@
-import { Layout, Star, Settings, Database, Users, MessageSquare, Bell, ThumbsUp, TrendingUp, User2 } from 'lucide-react';
+import { Layout, Settings, Database, Users, MessageSquare, Bell, ThumbsUp, TrendingUp, User2, PlusCircleIcon } from 'lucide-react';
 
 
 
@@ -8,7 +8,7 @@ export const sidebarConfig = [
     icon: Layout,
     submenu: [
       { title: 'Liked Posts', icon: ThumbsUp ,  path: "/liked" },
-      { title: 'Create', icon: Star , path: "/create" },
+      { title: 'Create', icon: PlusCircleIcon, path: "/create" },
       { title: 'Settings', icon: Settings , path: "/settings" },
     ]
   },

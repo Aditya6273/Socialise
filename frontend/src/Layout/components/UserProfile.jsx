@@ -6,9 +6,8 @@ import { useUserStore } from "@/Stores/useUserStore";
 export default function UserProfile() {
   const user = localStorage.getItem("user");
   const parsedUser = JSON.parse(user);
-  console.log(parsedUser);
   const name = parsedUser?.firstName + " " + parsedUser?.lastName;
-  const pic = parsedUser?.profilePic;
+  const pic = parsedUser?.profilePic || "./defaults/default_profile_pic.jpeg";
   const { logout } = useUserStore();
   const handleClick = async () => {
     await logout();
@@ -17,7 +16,7 @@ export default function UserProfile() {
   return (
     <div className={cn("border-t border-white/10 p-4 flex items-center gap-4")}>
       <img
-        src={`http://localhost:3000/${pic}`}
+        src={pic}
         alt="Profile"
         className="w-8 h-8 rounded-full"
       />

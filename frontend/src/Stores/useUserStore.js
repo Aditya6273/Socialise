@@ -74,4 +74,42 @@ export const useUserStore = create((set) => ({
       throw error;
     }
   },
+  getProfile:async () =>{
+    try {
+      set({ isLoading: true });
+      const res = await Axios.get("/users/profile");
+      set({
+        isLoading: false,
+        isError: false,
+        user: res.data.user,
+      });
+      localStorage.setItem("user", JSON.stringify(res.data.user));
+      console.log(res.data.user);
+      
+    } catch (error) {
+      set({ isError: true, error: error, isLoading: false });
+      toast.error("Error " + error?.res?.data?.message);
+      throw error;
+      
+    }
+  },
+  updateProfile: async (data) => {
+    try {
+      set({ isLoading: true, isError: false, error: null }); // Reset error state before request
+      const res = await Axios.put("/users/update-profile", data);
+      set({
+        isLoading: false,
+        user: res.data.user,
+      });
+      localStorage.setItem("user", JSON.stringify(res.data.user));
+      toast.success("Profile updated successfully");
+      return res.data.user; // Return updated user data
+    } catch (error) {
+      const errorMessage = error?.response?.data?.message || "An unexpected error occurred";
+      set({ isLoading: false, isError: true, error });
+      toast.error("Error: " + errorMessage);
+      throw error; 
+    }
+  },
+  
 }));
