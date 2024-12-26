@@ -75,7 +75,7 @@ export const ProfileContent = () => {
               userPosts.length > 2 ? "justify-center" : "justify-start"
             } gap-4 flex-1`}
           >
-            {userPosts.map((post) => (
+            {userPosts.reverse().map((post) => (
               <Link
                 to={`/post/${post._id}`}
                 key={post._id} // Unique key at the top-level element in .map()

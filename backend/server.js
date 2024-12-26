@@ -10,6 +10,7 @@ config();
 
 import authRoutes from "./routes/authRoutes.js";
 import postRoutes from "./routes/postRoutes.js";
+import userRoutes from "./routes/userRoutes.js";
 import { connect } from "./config/dbConfig.js";
 import errorHandler from "./middlewares/errorHanderMiddleware.js";
 
@@ -37,8 +38,9 @@ app.use(
   })
 );
 
-app.use("/api/users", authRoutes);
+app.use("/api/auth", authRoutes);
 app.use("/api/posts",postRoutes)
+app.use("/api/users",userRoutes);
 
 setTimeout(() => {
   //delete file from tmp folder

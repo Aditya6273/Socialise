@@ -1,4 +1,4 @@
-import { Layout, Settings, Database, Users, MessageSquare, Bell, ThumbsUp, TrendingUp, User2, PlusCircleIcon } from 'lucide-react';
+import { Layout, Settings, Database, Users, MessageSquare, Bell, TrendingUp, User2, PlusCircleIcon, Pen } from 'lucide-react';
 
 
 
@@ -7,9 +7,9 @@ export const sidebarConfig = [
     title: 'Playground',
     icon: Layout,
     submenu: [
-      { title: 'Liked Posts', icon: ThumbsUp ,  path: "/liked" },
-      { title: 'Create', icon: PlusCircleIcon, path: "/create" },
-      { title: 'Settings', icon: Settings , path: "/profile/update" },
+      { title: 'Create Post', icon: PlusCircleIcon, path: "/create" },
+      { title: 'Edit Profile', icon: Pen ,  path: "/profile/update" },
+      { title: 'Settings', icon: Settings , path: "/settings" },
     ]
   },
   {
@@ -25,15 +25,16 @@ export const sidebarConfig = [
     icon: Users,
     submenu: [
       { title: 'Chat', icon: MessageSquare ,path: '/chat' },
-      { title: 'Notifications', icon: Bell ,path: "/notifications" }
+      { title: 'Notifications', icon: Bell ,path: "/notifications" },
+      { title: 'Bonds', icon: Users , path: "/bonds" },
     ]
   },
   {
-    title: 'Settings',
+    title: 'Accounts',
     icon: Settings,
     submenu: [
       { title: 'Profile', icon: Users , path: "/profile" },
-      { title: 'Preferences', icon: Settings , path: "/settings" },
+      { title: 'Settings', icon: Settings , path: "/settings" },
     ]
   }
 ];

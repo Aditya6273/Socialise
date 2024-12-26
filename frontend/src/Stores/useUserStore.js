@@ -12,7 +12,7 @@ export const useUserStore = create((set) => ({
   signup: async (data) => {
     try {
       set({ isLoading: true });
-      const res = await Axios.post("/users/register", data);
+      const res = await Axios.post("/auth/register", data);
       console.log(res.data);
       set({
         isLoading: false,
@@ -28,7 +28,7 @@ export const useUserStore = create((set) => ({
       const errorMessage = error?.response?.data?.message || "An unexpected error occurred";
 
       set({ isError: true, error: errorMessage, isLoading: false });
-      toast.error("Error " + errorMessage);
+      toast.error(errorMessage);
       throw error;
     }
   },
@@ -36,7 +36,7 @@ export const useUserStore = create((set) => ({
   login: async (data) => {
     try {
       set({ isLoading: true });
-      const res = await Axios.post("/users/login", data);
+      const res = await Axios.post("/auth/login", data);
       set({
         isLoading: false,
         isError: false,
@@ -53,7 +53,7 @@ export const useUserStore = create((set) => ({
       const errorMessage = error?.response?.data?.message || "An unexpected error occurred";
 
       set({ isError: true, error: errorMessage, isLoading: false });
-      toast.error("Error " + errorMessage);
+      toast.error(errorMessage);
       throw error;
     }
   },
@@ -61,7 +61,7 @@ export const useUserStore = create((set) => ({
   logout: async () => {
     try {
       set({ isLoading: true });
-      const res = await Axios.get("/users/logout");
+      const res = await Axios.get("/auth/logout");
       set({
         isLoading: false,
         isError: false,
@@ -76,14 +76,14 @@ export const useUserStore = create((set) => ({
       const errorMessage = error?.response?.data?.message || "An unexpected error occurred";
       
       set({ isError: true, error: errorMessage, isLoading: false });
-      toast.error("Error " + errorMessage);
+      toast.error(errorMessage);
       throw error;
     }
   },
   getProfile:async () =>{
     try {
       set({ isLoading: true });
-      const res = await Axios.get("/users/profile");
+      const res = await Axios.get("/auth/profile");
       set({
         isLoading: false,
         isError: false,
@@ -95,7 +95,7 @@ export const useUserStore = create((set) => ({
     } catch (error) {
       const errorMessage = error?.response?.data?.message || "An unexpected error occurred";
       set({ isError: true, error: errorMessage, isLoading: false });
-      toast.error("Error " + errorMessage);
+      toast.error(errorMessage);
       throw error;
       
     }
@@ -103,7 +103,7 @@ export const useUserStore = create((set) => ({
   updateProfile: async (data) => {
     try {
       set({ isLoading: true, isError: false, error: null }); // Reset error state before request
-      const res = await Axios.put("/users/update-profile", data);
+      const res = await Axios.put("/auth/update-profile", data);
       set({
         isLoading: false,
         user: res.data.user,
@@ -114,7 +114,7 @@ export const useUserStore = create((set) => ({
     } catch (error) {
       const errorMessage = error?.response?.data?.message || "An unexpected error occurred";
       set({ isLoading: false, isError: true, error: errorMessage });
-      toast.error("Error: " + errorMessage);
+      toast.error(errorMessage);
       throw error; 
     }
   },

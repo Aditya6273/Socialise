@@ -7,7 +7,7 @@ export default function UserProfile() {
   const user = localStorage.getItem("user");
   const parsedUser = JSON.parse(user);
   const name = parsedUser?.firstName + " " + parsedUser?.lastName;
-  const pic = parsedUser?.profilePic || "./defaults/default_profile_pic.jpeg";
+  const pic = parsedUser?.profilePic || "./default_profile_pic.jpeg";
   const { logout } = useUserStore();
   const handleClick = async () => {
     await logout();

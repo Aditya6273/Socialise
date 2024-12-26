@@ -176,6 +176,7 @@ export const UpdateProfile = async (req, res) => {
     }
     if (coverImg && coverImg.tempFilePath) {
       try {
+        console.log('Removing temp profile pic file:', coverImg.tempFilePath);
         fs.unlinkSync(coverImg.tempFilePath);
       } catch (err) {
         console.error('Error deleting temp cover img file:', err);

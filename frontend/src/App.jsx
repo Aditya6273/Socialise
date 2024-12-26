@@ -86,7 +86,7 @@ const App = () => {
           />
         </Route>
       </Routes>
-      <Toaster />
+      <Toaster position="bottom-right" />
     </>
   );
 };

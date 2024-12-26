@@ -75,7 +75,7 @@ export default function Sidebar() {
       </nav>
 
       {/* User Profile */}
-     {parsedUser && <Link ><UserProfile /></Link>}
+     {parsedUser && <Link to={`/profile`}><UserProfile /></Link>}
      {!parsedUser && <Login />}
     </aside>
   );

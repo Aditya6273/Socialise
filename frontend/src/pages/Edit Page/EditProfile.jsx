@@ -7,6 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useNavigate } from "react-router-dom";
 import { useUserStore } from "@/Stores/useUserStore";
 
+
 export function EditProfile() {
   const [profilePicPreview, setProfilePicPreview] = useState("");
   const [coverImgPreview, setCoverImgPreview] = useState("");
@@ -72,7 +73,7 @@ export function EditProfile() {
                 ) : (
                   <div className="flex h-64 w-full items-center justify-center bg-zinc-900 transition-colors group-hover:bg-opacity-70">
                     <img
-                      src={parsedUser.coverImg}
+                      src={parsedUser.coverImg ? parsedUser.coverImg :"/default_cover_img.jpeg"}  
                       className="h-full w-full object-cover"
                       alt="previous pic"
                     />
@@ -109,7 +110,7 @@ export function EditProfile() {
                   <div className="flex h-32 w-32 items-center justify-center rounded-full border-4 overflow-hidden bg-zinc-900 border-zinc-500 shadow-md group-hover:bg-opacity-70">
                     <ImagePlus className="h-8 w-8 text-slate-400" />
                     <img
-                      src={parsedUser.profilePic}
+                      src={parsedUser.profilePic ? parsedUser.profilePic : "/default_profile_pic.jpeg"}
                       className="h-full w-full object-cover"
                       alt="previous pic"
                     />
