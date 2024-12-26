@@ -93,6 +93,20 @@ const EditPage = () => {
               className="w-full p-2 bg-zinc-700 text-white rounded-md border border-zinc-600 focus:ring-2 focus:ring-blue-500 focus:outline-none"
             />
           </div>
+          <div>
+            <label
+              htmlFor="firstName"
+              className="block text-sm font-medium mb-2"
+            >
+              Bio
+            </label>
+            <textarea
+              type="text"
+              id="bio"
+              name="bio"
+              className="w-full p-2 resize-none bg-zinc-700 text-white rounded-md border border-zinc-600 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            />
+          </div>
 
           <div className="flex justify-between">
             <button

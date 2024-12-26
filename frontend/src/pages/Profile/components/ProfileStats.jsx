@@ -8,11 +8,11 @@ export const ProfileStats = ({ following, followers }) => {
     <div className="flex gap-6">
       <Button variant="ghost" className="hover:bg-zinc-800">
         <span className="font-bold text-white mr-1">{following}</span>
-        <span className="text-zinc-400">Following</span>
+        <span className="text-zinc-400">Bonded</span>
       </Button>
       <Button variant="ghost" className="hover:bg-zinc-800">
         <span className="font-bold text-white mr-1">{followers}</span>
-        <span className="text-zinc-400">Followers</span>
+        <span className="text-zinc-400">Bondings</span>
       </Button>
     </div>
   );

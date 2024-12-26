@@ -9,7 +9,7 @@ export const sidebarConfig = [
     submenu: [
       { title: 'Liked Posts', icon: ThumbsUp ,  path: "/liked" },
       { title: 'Create', icon: PlusCircleIcon, path: "/create" },
-      { title: 'Settings', icon: Settings , path: "/settings" },
+      { title: 'Settings', icon: Settings , path: "/profile/update" },
     ]
   },
   {

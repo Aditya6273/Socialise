@@ -7,7 +7,7 @@ const Nav = () => {
     <div>
         <div className="flex h-screen overflow-hidden bg-[#121212]">
       <Sidebar />
-      <main className="flex-1 overflow-auto p-2">
+      <main className="flex-1 overflow-auto p-1">
        <Outlet/>
       </main>
     </div>

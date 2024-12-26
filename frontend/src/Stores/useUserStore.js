@@ -25,8 +25,10 @@ export const useUserStore = create((set) => ({
       toast.success("User registered successfully");
       return res.data.user;
     } catch (error) {
-      set({ isError: true, error: error, isLoading: false });
-      toast.error("Failed to register user");
+      const errorMessage = error?.response?.data?.message || "An unexpected error occurred";
+
+      set({ isError: true, error: errorMessage, isLoading: false });
+      toast.error("Error " + errorMessage);
       throw error;
     }
   },
@@ -48,8 +50,10 @@ export const useUserStore = create((set) => ({
 
       return res.data.user;
     } catch (error) {
-      set({ isError: true, error: error, isLoading: false });
-      toast.error("Error " + error.message);
+      const errorMessage = error?.response?.data?.message || "An unexpected error occurred";
+
+      set({ isError: true, error: errorMessage, isLoading: false });
+      toast.error("Error " + errorMessage);
       throw error;
     }
   },
@@ -69,8 +73,10 @@ export const useUserStore = create((set) => ({
       toast.success("User logged out successfully");
       console.log(res.data);
     } catch (error) {
-      set({ isError: true, error: error, isLoading: false });
-      toast.error("Error " + error.message);
+      const errorMessage = error?.response?.data?.message || "An unexpected error occurred";
+      
+      set({ isError: true, error: errorMessage, isLoading: false });
+      toast.error("Error " + errorMessage);
       throw error;
     }
   },
@@ -83,12 +89,13 @@ export const useUserStore = create((set) => ({
         isError: false,
         user: res.data.user,
       });
-      localStorage.setItem("user", JSON.stringify(res.data.user));
-      console.log(res.data.user);
+     return res.data.user;
+      // console.log(res.data.user);
       
     } catch (error) {
-      set({ isError: true, error: error, isLoading: false });
-      toast.error("Error " + error?.res?.data?.message);
+      const errorMessage = error?.response?.data?.message || "An unexpected error occurred";
+      set({ isError: true, error: errorMessage, isLoading: false });
+      toast.error("Error " + errorMessage);
       throw error;
       
     }
@@ -106,7 +113,7 @@ export const useUserStore = create((set) => ({
       return res.data.user; // Return updated user data
     } catch (error) {
       const errorMessage = error?.response?.data?.message || "An unexpected error occurred";
-      set({ isLoading: false, isError: true, error });
+      set({ isLoading: false, isError: true, error: errorMessage });
       toast.error("Error: " + errorMessage);
       throw error; 
     }

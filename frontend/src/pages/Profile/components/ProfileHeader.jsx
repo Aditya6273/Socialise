@@ -1,4 +1,4 @@
-/* eslint-disable react/prop-types */
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { PenLine } from "lucide-react";
@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 
 
 
-export const ProfileHeader = ({ user }) => {
+export const ProfileHeader = () => {
   const parsedUser = JSON.parse(localStorage.getItem("user"));
   return (
     <div className="relative">
@@ -24,16 +24,16 @@ export const ProfileHeader = ({ user }) => {
         <div className="max-w-6xl mx-auto">
           <div className="flex justify-between items-end">
             <div className="flex gap-6 items-end">
-              <Avatar className="h-32 w-32 border-4 border-zinc-900">
+              <Avatar className="h-40 w-40 border-4 border-zinc-900">
                 <AvatarImage src={parsedUser.profilePic ? parsedUser.profilePic : "/defaults/default_profile_pic.jpeg"} alt={parsedUser.firstName + " " + parsedUser.lastName} />
-                <AvatarFallback>{user.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+                <AvatarFallback>{parsedUser.firstName.charAt(0)}</AvatarFallback>
               </Avatar>
               <div className="mb-2 space-y-1">
                 <h1 className="text-3xl font-bold text-white">{parsedUser.firstName + " " + parsedUser.lastName}</h1>
                 <p className="text-zinc-400">@{parsedUser.username}</p>
               </div>
             </div>
-            <Link to="/profile/edit">
+            <Link to="/profile/update">
             <Button variant="outline" className="mb-2 bg-zinc-800/50 border-zinc-700 hover:bg-zinc-800">
               <PenLine className="h-4 w-4 mr-2" />
               Edit Profile

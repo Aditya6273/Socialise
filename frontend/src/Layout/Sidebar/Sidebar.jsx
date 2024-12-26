@@ -6,6 +6,7 @@ import { sidebarConfig } from "../config/SidebarConfig";
 import SidebarItem from "../components/SidebarItem";
 import UserProfile from "../components/UserProfile";
 import Login from "../components/Login";
+import { Link } from "react-router-dom";
 
 export default function Sidebar() {
  
@@ -37,7 +38,7 @@ export default function Sidebar() {
             "group-hover/sidebar:w-auto group-hover/sidebar:opacity-100"
           )}
         >
-          <h2 className="font-semibold truncate">Socialise</h2>
+          <Link to={"/"} className="font-semibold truncate">Socialise</Link>
           <p className="text-xs text-gray-400 truncate"> By @adityashah2701</p>
         </div>
         <button
@@ -74,7 +75,7 @@ export default function Sidebar() {
       </nav>
 
       {/* User Profile */}
-     {parsedUser && <UserProfile />}
+     {parsedUser && <Link ><UserProfile /></Link>}
      {!parsedUser && <Login />}
     </aside>
   );

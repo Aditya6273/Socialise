@@ -115,10 +115,11 @@ export const Logout = async (req, res, next) => {
     next(error);
   }
 };
-export const Profile = (req, res, next) => {
+export const Profile = async (req, res, next) => {
   try {
-    const loggedInUser = req.user;
-    return res.status(200).json({ user: loggedInUser });
+    const loggedInUser = req.user._id;
+    const user = await User.findById(loggedInUser).select("-password").populate("posts");
+    return res.status(200).json({ user });
   } catch (error) {
     next(error);
   }
@@ -126,8 +127,8 @@ export const Profile = (req, res, next) => {
 export const UpdateProfile = async (req, res) => {
   try {
     const userId = req.user._id;
-    const { firstName, lastName } = req.body;
-    const { profilePic, coverImg } = req.files;
+    const { firstName, lastName ,bio } = req.body;
+    const { profilePic, coverImg } = req.files || {};
 
     console.log(req.files);   // Log uploaded files to check the structure
 
@@ -160,6 +161,7 @@ export const UpdateProfile = async (req, res) => {
     // Update user information
     user.firstName = firstName || user.firstName;
     user.lastName = lastName || user.lastName;
+    user.bio = bio || user.bio;
 
     // Save updated user to the database
     const updatedUser = await user.save();

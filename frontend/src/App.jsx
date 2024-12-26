@@ -5,36 +5,44 @@ import Register from "./pages/Register/Register";
 import { Toaster } from "react-hot-toast";
 import { useState, useEffect } from "react";
 import Nav from "./pages/Sidebar/Nav";
-
 import { useUserStore } from "./Stores/useUserStore";
 import { Loader } from "lucide-react";
 import { Profile } from "./pages/Profile/Profile";
-import EditPage from "./pages/Edit Page/EditPage";
+import Post from "./pages/Post Page/Post";
+import { EditProfile } from "./pages/Edit Page/EditProfile";
 
 const App = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [loading, setLoading] = useState(false);  // Add loading state
+  const [isAuthenticated, setIsAuthenticated] = useState(null); // Start with `null` for an unresolved state
+
   const { getProfile } = useUserStore();
 
-  // Fetch user profile on mount
+  // Fetch user profile and check authentication
   useEffect(() => {
-    const fetch = async () => {
-      await getProfile();
-      const token = localStorage.getItem("token");
-      if (token) {
-        setIsAuthenticated(true); // If token exists, authenticate the user
-      } else {
-        setIsAuthenticated(false); // Otherwise, set authentication to false
+    const fetchAuthState = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (token) {
+          await getProfile(); // Ensure the profile is fetched
+          setIsAuthenticated(true);
+        } else {
+          setIsAuthenticated(false);
+        }
+      } catch (error) {
+        console.error("Failed to fetch authentication state:", error);
+        setIsAuthenticated(false);
       }
-      setLoading(false); // Set loading to false once the check is complete
     };
-    fetch();
+
+    fetchAuthState();
   }, [getProfile]);
 
-  if (loading) {
-    return <div className="flex justify-center items-center h-screen">
-      <Loader className="animate-spin size-20 text-zinc-600"/>
-    </div>;  // Show a loading spinner or message until token is checked
+  // Show loader while determining authentication state
+  if (isAuthenticated === null) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <Loader className="animate-spin size-20 text-zinc-600" />
+      </div>
+    );
   }
 
   return (
@@ -43,15 +51,22 @@ const App = () => {
         <Route path="/" element={<Nav />}>
           <Route
             index
-            element={isAuthenticated ? <Home /> : <Navigate to="/login" replace />}
+            element={
+              isAuthenticated ? <Home /> : <Navigate to="/login" replace />
+            }
           />
           <Route
-            path="/profile"
-            element={isAuthenticated ? <Profile /> : <Navigate to="/login" replace />}
+            path="profile"
+            element={
+              isAuthenticated ? <Profile /> : <Navigate to="/login" replace />
+            }
           />
+          
           <Route
-            path="/profile/edit"
-            element={isAuthenticated ? <EditPage /> : <Navigate to="/login" replace />}
+            path="profile/update"
+            element={
+              isAuthenticated ? <EditProfile /> : <Navigate to="/login" replace />
+            }
           />
           <Route
             path="login"
@@ -59,7 +74,15 @@ const App = () => {
           />
           <Route
             path="register"
-            element={!isAuthenticated ? <Register /> : <Navigate to="/" replace />}
+            element={
+              !isAuthenticated ? <Register /> : <Navigate to="/" replace />
+            }
+          />
+          <Route
+            path="post/:id"
+            element={
+              isAuthenticated ? <Post /> : <Navigate to="/login" replace />
+            }
           />
         </Route>
       </Routes>

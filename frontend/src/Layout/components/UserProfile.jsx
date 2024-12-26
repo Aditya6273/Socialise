@@ -14,7 +14,7 @@ export default function UserProfile() {
     window.location.reload();
   };
   return (
-    <div className={cn("border-t border-white/10 p-4 flex items-center gap-4")}>
+    <div className={cn("border-t border-white/10 p-2 flex items-center gap-2")}>
       <img
         src={pic}
         alt="Profile"
@@ -22,7 +22,7 @@ export default function UserProfile() {
       />
       <div className={cn("flex-1 transition-opacity")}>
         <p className="font-medium">{name}</p>
-        <p className="text-sm text-gray-400">{parsedUser.email}</p>
+        <p className="text-xs text-gray-400">{parsedUser.email}</p>
       </div>
       <Button
         onClick={handleClick}
