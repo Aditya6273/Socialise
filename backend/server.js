@@ -20,7 +20,7 @@ const __dirname = path.resolve();
 
 app.use(
   cors({
-    origin: "https://socialise-w64m.onrender.com/",
+    origin: process.env.NODE_ENV === 'production' ? process.env.CLIENT_URL : 'http://localhost:3000',
     credentials: true,
   })
 );
