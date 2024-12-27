@@ -20,7 +20,7 @@ const __dirname = path.resolve();
 
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: "https://socialise-w64m.onrender.com/",
     credentials: true,
   })
 );
