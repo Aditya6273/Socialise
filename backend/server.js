@@ -37,10 +37,11 @@ app.use(
     limits: { fileSize: 5 * 1024 * 1024 }, // 5MB max file size
   })
 );
+app.use(express.static(path.join(__dirname, "frontend/dist")));
 
 app.use("/api/auth", authRoutes);
-app.use("/api/posts",postRoutes)
-app.use("/api/users",userRoutes);
+app.use("/api/posts", postRoutes);
+app.use("/api/users", userRoutes);
 
 setTimeout(() => {
   //delete file from tmp folder
@@ -48,6 +49,11 @@ setTimeout(() => {
 }, 24 * 60 * 60 * 1000);
 
 app.use(errorHandler);
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "frontend", "dist", "index.html"));
+});
+
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
   connect(process.env.MONGO_URL);

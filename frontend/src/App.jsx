@@ -10,6 +10,7 @@ import { Loader } from "lucide-react";
 import { Profile } from "./pages/Profile/Profile";
 import Post from "./pages/Post Page/Post";
 import { EditProfile } from "./pages/Edit Page/EditProfile";
+import CreatePost from "./pages/Create Post/CreatePost";
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(null); // Start with `null` for an unresolved state
@@ -82,6 +83,12 @@ const App = () => {
             path="post/:id"
             element={
               isAuthenticated ? <Post /> : <Navigate to="/login" replace />
+            }
+          />
+          <Route
+            path="create"
+            element={
+              isAuthenticated ? <CreatePost /> : <Navigate to="/login" replace />
             }
           />
         </Route>

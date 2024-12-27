@@ -19,8 +19,8 @@ export const Profile = () => {
           />
           
           <ProfileStats
-            following={parsedUser.bondings.length || 0}
-            followers={parsedUser.bonds.length || 0} 
+            following={parsedUser?.bondings.length || 0}
+            followers={parsedUser?.bonds.length || 0} 
           />
           
           <ProfileContent />

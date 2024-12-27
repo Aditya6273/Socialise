@@ -3,13 +3,12 @@ import Post from "../models/postModel.js";
 import { User } from "../models/userModel.js";
 import { extractPublicIdFromUrl } from "../utils/extractPublicIdFromUrl.js";
 import { uploadToCloudinary } from "../utils/uploadImage.js";
-import fs from "fs"
-
+import fs from "fs";
 
 export const createPost = async (req, res) => {
   try {
     const { title, description } = req.body;
-    const { image } = req.files;
+    const { image } = req.files || {};
     console.log(req.files);
     const loggedInUser = req.user;
     const userId = loggedInUser._id;
@@ -39,7 +38,7 @@ export const createPost = async (req, res) => {
     loggedInUser.posts.push(newPost._id);
     await loggedInUser.save();
 
-    if(image && image.tempFilePath){
+    if (image && image.tempFilePath) {
       fs.unlinkSync(image.tempFilePath);
     }
 
@@ -97,17 +96,30 @@ export const deletePost = async (req, res) => {
         .json({ message: "You are not authorized to delete this post" });
     }
 
-
     const publicId = extractPublicIdFromUrl(post.image);
-    await cloudinary.uploader.destroy(publicId,(err,result)=>{
-      if(err) console.error(err);
-      else console.log(result);
-    });
+    if (publicId) {
+      console.log("Deleting image with public_id:", publicId);
+      try {
+        await cloudinary.uploader.destroy(publicId);
+      } catch (err) {
+        console.error("Error deleting image from Cloudinary:", err);
+        return res.status(500).json({
+          message: "An error occurred while deleting the image",
+          error: err.message,
+        });
+      }
+    }
 
-   
-    await Post.findByIdAndDelete(postId);
+    try {
+      await Post.findByIdAndDelete(postId);
+    } catch (error) {
+      console.error("Error deleting post from database:", error);
+      return res.status(500).json({
+        message: "An error occurred while deleting the post",
+        error: error.message,
+      });
+    }
 
-    
     const user = await User.findByIdAndUpdate(
       userId,
       { $pull: { posts: postId } },
@@ -121,9 +133,10 @@ export const deletePost = async (req, res) => {
     });
   } catch (error) {
     console.error("Error deleting post:", error);
-    return res
-      .status(500)
-      .json({ message: "An error occurred while deleting the post" });
+    return res.status(500).json({
+      message: "An error occurred while deleting the post",
+      error: error.message,
+    });
   }
 };
 export const deleteAll = async (req, res) => {
@@ -135,14 +148,13 @@ export const deleteAll = async (req, res) => {
       if (post.image) {
         const publicId = extractPublicIdFromUrl(post.image);
         if (publicId) {
-          // Log the public_id being deleted
           console.log("Deleting image with public_id:", publicId);
 
           await cloudinary.uploader.destroy(publicId, (error, result) => {
             if (error) {
-              console.error('Error deleting image from Cloudinary:', error);
+              console.error("Error deleting image from Cloudinary:", error);
             } else {
-              console.log('Image deleted from Cloudinary:', result);
+              console.log("Image deleted from Cloudinary:", result);
             }
           });
         }
@@ -155,8 +167,8 @@ export const deleteAll = async (req, res) => {
     return res.status(200).json({ message: "All posts deleted successfully" });
   } catch (error) {
     console.error("Error deleting all posts:", error);
-    return res.status(500).json({ message: "An error occurred while deleting all posts" });
+    return res
+      .status(500)
+      .json({ message: "An error occurred while deleting all posts" });
   }
 };
-
-
