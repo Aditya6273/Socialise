@@ -172,3 +172,26 @@ export const deleteAll = async (req, res) => {
       .json({ message: "An error occurred while deleting all posts" });
   }
 };
+
+export const getPostOfBondingUsers = async (req, res) => {
+  try {
+
+    const userId = req.user._id;
+
+    const user = await User.findById(userId).select('bondings');
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+   
+    const bondings = user.bondings;
+
+  
+    const posts = await Post.find({ userId: { $in: bondings } }).populate("userId");
+
+    return res.status(200).json({ posts });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'An error occurred while fetching posts' });
+  }
+};

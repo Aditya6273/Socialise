@@ -1,4 +1,4 @@
-import { Layout, Settings, Database, Users, MessageSquare, Bell, TrendingUp, User2, PlusCircleIcon, Pen } from 'lucide-react';
+import { Layout, Settings, Database, Users, MessageSquare, Bell, PlusCircleIcon, Pen, StickyNote } from 'lucide-react';
 
 
 
@@ -13,11 +13,10 @@ export const sidebarConfig = [
     ]
   },
   {
-    title: 'Feed',
+    title: 'Posts',
     icon: Database,
     submenu: [
-      { title: 'Followed', icon: User2 , path: "/followed" },
-      { title: 'Trending', icon: TrendingUp , path: "/trending"}
+      { title: 'Feed', icon: StickyNote , path: "/feed" },
     ]
   },
   {

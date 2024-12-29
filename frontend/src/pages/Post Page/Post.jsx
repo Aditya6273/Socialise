@@ -1,21 +1,13 @@
 import { usePostStore } from "@/Stores/usePostStore";
+import { Calendar, Heart, Loader2, MessageCircle, Share2, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import {
-  Calendar,
-  Heart,
-  Loader2,
-  MessageCircle,
-  Share2,
-  Trash2,
-} from "lucide-react";
+import { useNavigate, useParams } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 
 const Post = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { getPostById, deletePostById, isLoading, isError, error } =
-    usePostStore();
+  const { getPostById, deletePostById, isLoading, isError, error } = usePostStore();
   const [post, setPost] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [deleteError, setDeleteError] = useState(null);
@@ -35,8 +27,9 @@ const Post = () => {
     }
   }, [id, getPostById]);
 
-  const parsedUser = JSON.parse(localStorage.getItem("user"));
-  const isOwner = parsedUser?.posts?.includes(id); // Check if the user is the owner of the post
+  // Get user data and check ownership
+  const user = JSON.parse(localStorage.getItem("user") || "null");
+  const isOwner = user?._id === post?.userId._id;
 
   const handleDelete = async () => {
     try {
@@ -47,10 +40,6 @@ const Post = () => {
       setDeleteError("Failed to delete the post. Please try again later.");
       console.error("Error deleting post:", err);
     }
-  };
-
-  const handleCancel = () => {
-    setShowModal(false);
   };
 
   if (isLoading) {
@@ -103,9 +92,9 @@ const Post = () => {
 
           <div className="p-6 sm:p-8 w-full">
             <div className="flex items-center mb-6">
-              <div className="flex items-center">
+              <div className="flex items-center flex-1">
                 <img
-                  src={post.userId.profilePic}
+                  src={post.userId.profilePic || '/default_profile_pic.jpeg'}
                   alt={`${post.userId.firstName} ${post.userId.lastName}`}
                   className="w-12 h-12 rounded-full object-cover"
                 />
@@ -119,11 +108,10 @@ const Post = () => {
                   </div>
                 </div>
               </div>
-              {/* Conditionally render delete button */}
               {isOwner && (
                 <button
                   onClick={() => setShowModal(true)}
-                  className="ml-auto text-gray-400 hover:text-red-500 transition-colors"
+                  className="text-gray-400 hover:text-red-500 transition-colors"
                   aria-label="Delete post"
                 >
                   <Trash2 className="w-6 h-6" />
@@ -141,7 +129,7 @@ const Post = () => {
               {post.description}
             </ReactMarkdown>
 
-            <div className="flex items-center space-x-6 pt-6">
+            <div className="flex items-center space-x-6 pt-6 text-sm">
               <button className="flex items-center text-gray-300 hover:text-red-500 transition-colors">
                 <Heart className="w-6 h-6 mr-2" />
                 <span>{post.likes.length} Likes</span>
@@ -174,23 +162,23 @@ const Post = () => {
 
       {showModal && (
         <div className="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-50">
-          <div className="bg-zinc-950 rounded-lg p-6 w-1/4 h-40 flex flex-col justify-between">
+          <div className="bg-zinc-950 rounded-lg p-6 max-w-md w-full mx-4">
             <h2 className="text-xl font-semibold text-gray-300 mb-4">
               Are you sure you want to delete this post?
             </h2>
             {deleteError && (
-              <div className="text-red-500 text-sm mb-2">{deleteError}</div>
+              <div className="text-red-500 text-sm mb-4">{deleteError}</div>
             )}
             <div className="flex flex-row-reverse justify-start gap-2">
               <button
                 onClick={handleDelete}
-                className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-500"
+                className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-500 transition-colors"
               >
                 Yes, Delete
               </button>
               <button
-                onClick={handleCancel}
-                className="bg-gray-300 text-gray-800 px-4 py-2 rounded-md hover:bg-gray-200"
+                onClick={() => setShowModal(false)}
+                className="bg-gray-300 text-gray-800 px-4 py-2 rounded-md hover:bg-gray-200 transition-colors"
               >
                 Cancel
               </button>

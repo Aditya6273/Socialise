@@ -11,7 +11,7 @@ export function SearchBar({ value, onChange }) {
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
             type="text"
-            placeholder="Search users by name or username..."
+            placeholder="Search users by username..."
             className="pl-10 w-full border-none bg-transparent"
             value={value}
             onChange={onChange}

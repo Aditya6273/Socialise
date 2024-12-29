@@ -1,55 +1,69 @@
-import { useState, useEffect, useMemo } from "react";
-import { useUserStore } from "@/Stores/useUserStore";
+import { useState, useEffect, useMemo } from 'react';
+import { useUserStore } from '@/Stores/useUserStore';
+import { matchesSearchTerm } from './searchUtils';
+
+
+
+const USERS_PER_PAGE = 6;
 
 export function useUserSearch() {
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
   const [users, setUsers] = useState([]);
-  const [limitedUsers, setLimitedUsers] = useState([]);
   const { getAllUnBondedUsers, isLoading } = useUserStore();
 
+  const loggedInUser = useMemo(() => {
+    try {
+      return JSON.parse(localStorage.getItem('user') || '{"bondings": []}');
+    } catch {
+      return { bondings: [] };
+    }
+  }, []);
+
   useEffect(() => {
+    let mounted = true;
+
     const fetchUsers = async () => {
       try {
-        const fetchedUsers = await getAllUnBondedUsers();
-        setUsers(fetchedUsers);
-        setLimitedUsers(fetchedUsers.slice(0, 6));
+        const allUsers = await getAllUnBondedUsers();
+        if (!mounted) return;
+
+        const unbondedUsers = allUsers.filter(
+          user => !loggedInUser.bondings.some(bond => bond.userId === user._id)
+        );
+        setUsers(shuffleArray(unbondedUsers));
       } catch (error) {
-        console.error("Error fetching users:", error);
+        console.error('Failed to fetch users:', error);
       }
     };
+
     fetchUsers();
-  }, [getAllUnBondedUsers]);
+    return () => { mounted = false };
+  }, [getAllUnBondedUsers, loggedInUser.bondings]);
 
   const filteredUsers = useMemo(() => {
-    const searchWords = searchTerm.toLowerCase().split(" ").filter(Boolean);
-
-    const matches = users.filter((user) =>
-      searchWords.every((word) =>
-        [user.username, user.firstname, user.lastname ,user._id]
-          .filter(Boolean)
-          .some((field) => field.toLowerCase().includes(word))
-      )
-    );
-
-    if (searchTerm) {
-      return matches;
-    }
-
-    return limitedUsers;
-  }, [searchTerm, users, limitedUsers]);
-
- 
-  useEffect(() => {
-    if (!searchTerm) {
-     
-      setLimitedUsers(users.slice(0, 6));
-    }
+    const matchingUsers = users.filter(user => matchesSearchTerm(user, searchTerm));
+    return searchTerm ? matchingUsers : matchingUsers.slice(0, USERS_PER_PAGE);
   }, [searchTerm, users]);
+
+  const reshuffleUsers = () => {
+    setUsers(prevUsers => shuffleArray([...prevUsers]));
+  };
 
   return {
     searchTerm,
     setSearchTerm,
     filteredUsers,
     isLoading,
+    totalUsers: users.length,
+    reshuffleUsers
   };
+}
+
+function shuffleArray(array) {
+  const shuffled = [...array];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
 }

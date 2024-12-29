@@ -23,7 +23,7 @@ export default function Home() {
                 <Box className="h-8 w-8 text-zinc-300" />
               </div>
               <h1 className="text-4xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-zinc-200 to-zinc-400">
-                Welcome to Socialise , {parsedUser ? parsedUser?.username : ""}
+                Welcome to Socialise , <span className="text-blue-600">{parsedUser ? parsedUser?.username : ""}</span>
               </h1>
             </div>
             <p className="text-2xl text-zinc-400 max-w-2xl leading-relaxed">

@@ -31,7 +31,7 @@ const Login = () => {
     try {
       const user = await login(formData);
       if (user) {
-        window.location.reload(); // Reload the page after successful login
+        // Reload the page after successful login
         navigate('/'); // Correctly navigate after successful login
       }
     } catch (err) {

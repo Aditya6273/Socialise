@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import "tailwindcss/tailwind.css";
 import { Link } from "react-router-dom";
 import { useUserStore } from "@/Stores/useUserStore";
-
+import { useNavigate } from "react-router-dom";
 const Register = () => {
   const [formData, setFormData] = useState({
     firstName: "",
@@ -15,7 +15,7 @@ const Register = () => {
     password: "",
     email: "",
   });
-  
+  const navigate = useNavigate();
   const [error, setError] = useState(null);
 
   const { signup, isLoading } = useUserStore();
@@ -34,7 +34,7 @@ const Register = () => {
     try {
       const user = await signup(formData);
       if (user) {
-        window.location.reload();
+        navigate("/")
          // Navigate to the home page upon successful registration
       }
     } catch (err) {

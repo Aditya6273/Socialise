@@ -6,7 +6,7 @@ import { Toaster } from "react-hot-toast";
 import { useState, useEffect } from "react";
 import Nav from "./pages/Sidebar/Nav";
 import { useUserStore } from "./Stores/useUserStore";
-import { Loader } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { Profile } from "./pages/Profile/Profile";
 import Post from "./pages/Post Page/Post";
 import { EditProfile } from "./pages/Edit Page/EditProfile";
@@ -14,6 +14,7 @@ import CreatePost from "./pages/Create Post/CreatePost";
 import MakeBond from "./pages/Make Bonds/MakeBond";
 
 import UserProfilePage from "./pages/User Profile/UserProfile";
+import Feed from "./pages/Feed Page/Feed";
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(null); // Start with `null` for an unresolved state
@@ -44,7 +45,7 @@ const App = () => {
   if (isAuthenticated === null) {
     return (
       <div className="flex justify-center items-center h-screen">
-        <Loader className="animate-spin size-20 text-zinc-600" />
+        <Loader2 className="animate-spin size-16 text-zinc-600" />
       </div>
     );
   }
@@ -104,6 +105,12 @@ const App = () => {
             path="profile/:id"
             element={
               isAuthenticated ? <UserProfilePage /> : <Navigate to="/login" replace />
+            }
+          />
+          <Route
+            path="feed"
+            element={
+              isAuthenticated ? <Feed /> : <Navigate to="/login" replace />
             }
           />
         </Route>
