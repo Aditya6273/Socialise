@@ -3,30 +3,31 @@ import toast from "react-hot-toast";
 import { create } from "zustand";
 
 export const useUserStore = create((set) => ({
-  user: null,
+  // Initialize user from localStorage
+  user: JSON.parse(localStorage.getItem("user") || "null"),
   isLoading: false,
   isError: false,
   error: null,
-  isAuthenticated: false,
 
   signup: async (data) => {
     try {
       set({ isLoading: true });
       const res = await Axios.post("/auth/register", data);
-      console.log(res.data);
+      const { user, token } = res.data;
+
       set({
         isLoading: false,
         isError: false,
-        isAuthenticated: true,
-        user: res.data.user,
+        user,
       });
-      localStorage.setItem("token", res.data.token);
-      localStorage.setItem("user", JSON.stringify(res.data.user));
+      localStorage.setItem("token", token);
+      localStorage.setItem("user", JSON.stringify(user));
       toast.success("User registered successfully");
-      return res.data.user;
-    } catch (error) {
-      const errorMessage = error?.response?.data?.message || "An unexpected error occurred";
 
+      return user;
+    } catch (error) {
+      const errorMessage =
+        error?.response?.data?.message || "An unexpected error occurred";
       set({ isError: true, error: errorMessage, isLoading: false });
       toast.error(errorMessage);
       throw error;
@@ -37,86 +38,167 @@ export const useUserStore = create((set) => ({
     try {
       set({ isLoading: true });
       const res = await Axios.post("/auth/login", data);
+      const { user, token } = res.data;
+
       set({
         isLoading: false,
         isError: false,
-        isAuthenticated: true,
-        user: res.data.user,
+        user,
       });
-      localStorage.setItem("token", res.data.token);
-      localStorage.setItem("user", JSON.stringify(res.data.user));
-
+      localStorage.setItem("token", token);
+      localStorage.setItem("user", JSON.stringify(user));
       toast.success("User logged in successfully");
 
-      return res.data.user;
+      return user;
     } catch (error) {
-      const errorMessage = error?.response?.data?.message || "An unexpected error occurred";
-
+      const errorMessage =
+        error?.response?.data?.message || "An unexpected error occurred";
       set({ isError: true, error: errorMessage, isLoading: false });
       toast.error(errorMessage);
       throw error;
     }
   },
 
+  // Logout
   logout: async () => {
     try {
       set({ isLoading: true });
       const res = await Axios.get("/auth/logout");
+
       set({
         isLoading: false,
         isError: false,
-        isAuthenticated: false,
         user: null,
       });
+
       localStorage.removeItem("token");
       localStorage.removeItem("user");
       toast.success("User logged out successfully");
-      console.log(res.data);
+
+      return res.data;
     } catch (error) {
-      const errorMessage = error?.response?.data?.message || "An unexpected error occurred";
-      
+      const errorMessage =
+        error?.response?.data?.message || "An unexpected error occurred";
       set({ isError: true, error: errorMessage, isLoading: false });
       toast.error(errorMessage);
       throw error;
     }
   },
-  getProfile:async () =>{
+
+  // Fetch user profile
+  getProfile: async () => {
     try {
       set({ isLoading: true });
       const res = await Axios.get("/auth/profile");
+
       set({
         isLoading: false,
         isError: false,
         user: res.data.user,
       });
-     return res.data.user;
-      // console.log(res.data.user);
-      
+
+      localStorage.setItem("user", JSON.stringify(res.data.user));
+
+      return res.data.user;
     } catch (error) {
-      const errorMessage = error?.response?.data?.message || "An unexpected error occurred";
+      const errorMessage =
+        error?.response?.data?.message || "An unexpected error occurred";
       set({ isError: true, error: errorMessage, isLoading: false });
       toast.error(errorMessage);
       throw error;
-      
     }
   },
+
+  // Update profile
   updateProfile: async (data) => {
     try {
-      set({ isLoading: true, isError: false, error: null }); // Reset error state before request
+      set({ isLoading: true, isError: false, error: null });
       const res = await Axios.put("/auth/update-profile", data);
+
       set({
         isLoading: false,
         user: res.data.user,
       });
       localStorage.setItem("user", JSON.stringify(res.data.user));
       toast.success("Profile updated successfully");
-      return res.data.user; // Return updated user data
+
+      return res.data.user;
     } catch (error) {
-      const errorMessage = error?.response?.data?.message || "An unexpected error occurred";
+      const errorMessage =
+        error?.response?.data?.message || "An unexpected error occurred";
       set({ isLoading: false, isError: true, error: errorMessage });
       toast.error(errorMessage);
+      throw error;
+    }
+  },
+
+  // Get user by ID
+  getUserById: async (userId) => {
+    try {
+      set({ isLoading: true });
+      const res = await Axios.get(`/users/get-user/${userId}`);
+
+      set({
+        isLoading: false,
+        isError: false,
+        user: res.data.user,
+      });
+
+      localStorage.setItem("userbyid", JSON.stringify(res.data.user));
+
+      return res.data.user;
+    } catch (error) {
+      const errorMessage =
+        error?.response?.data?.message || "An unexpected error occurred";
+      set({ isLoading: false, isError: true, error: errorMessage });
+      toast.error(errorMessage);
+      throw error;
+    }
+  },
+  getAllUnBondedUsers: async () => {
+    try {
+      set({ isLoading: true });
+      const res = await Axios.get("/users/all-users");
+      set({
+        isLoading: false,
+        isError: false,
+        unbondedUsers: res.data.users,
+      });
+      return res.data.users;
+    } catch (error) {
+      const errorMessage =
+        error?.response?.data?.message || "An unexpected error occurred";
+      set({ isLoading: false, isError: true, error: errorMessage });
+      toast.error(errorMessage);
+      throw error;
+    }
+  },
+  makeAndUnMakeBond: async (id) => {
+    try {
+      set({ isLoading: true });
+
+      const res = await Axios.post(`/users/make-bond/${id}`); 
+      const { loggedInUser, message } = res.data;
+
+   
+      localStorage.setItem("user", JSON.stringify(loggedInUser));
+
+      
+      set({
+        isLoading: false,
+        isError: false,
+      });
+
+      toast.success(message); 
+      return res.data;
+    } catch (error) {
+      const errorMessage =
+        error?.response?.data?.message || "An unexpected error occurred";
+
+      set({ isLoading: false, isError: true, error: errorMessage });
+
+      toast.error(errorMessage); 
       throw error; 
     }
   },
-  
 }));

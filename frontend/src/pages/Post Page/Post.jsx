@@ -8,17 +8,17 @@ import {
   MessageCircle,
   Share2,
   Trash2,
-} from "lucide-react"; // Import Trash2
-import ReactMarkdown from "react-markdown"; // Importing ReactMarkdown
+} from "lucide-react";
+import ReactMarkdown from "react-markdown";
 
 const Post = () => {
   const { id } = useParams();
-  const navigate = useNavigate(); // Assuming navigate is defined
+  const navigate = useNavigate();
   const { getPostById, deletePostById, isLoading, isError, error } =
-    usePostStore(); // Assuming deletePost is defined
+    usePostStore();
   const [post, setPost] = useState(null);
-  const [showModal, setShowModal] = useState(false); // State for showing the modal
-  const [deleteError, setDeleteError] = useState(null); // State for delete error
+  const [showModal, setShowModal] = useState(false);
+  const [deleteError, setDeleteError] = useState(null);
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -35,19 +35,22 @@ const Post = () => {
     }
   }, [id, getPostById]);
 
+  const parsedUser = JSON.parse(localStorage.getItem("user"));
+  const isOwner = parsedUser?.posts?.includes(id); // Check if the user is the owner of the post
+
   const handleDelete = async () => {
     try {
-      await deletePostById(id); // Call the delete function
+      await deletePostById(id);
       setShowModal(false);
-      navigate("/profile"); // Navigate to the root route after deletion
+      navigate("/profile");
     } catch (err) {
-      setDeleteError("Failed to delete the post. Please try again later."); // Set the delete error state
+      setDeleteError("Failed to delete the post. Please try again later.");
       console.error("Error deleting post:", err);
     }
   };
 
   const handleCancel = () => {
-    setShowModal(false); // Close the modal if the user cancels
+    setShowModal(false);
   };
 
   if (isLoading) {
@@ -85,23 +88,20 @@ const Post = () => {
   };
 
   return (
-    <div className="min-h-screen bg-transparent sm:py-8 smpx-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-transparent sm:py-8 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto">
         <div className="bg-zinc-900 text-white rounded-xl shadow-sm overflow-hidden">
-          {/* Hero Image */}
           {post.image && (
             <div className="relative h-[400px] sm:h-[600px]">
-            <img
-              src={post.image}
-              alt={post.title}
-              className="w-full h-full object-cover"
-            />
-          </div>
+              <img
+                src={post.image}
+                alt={post.title}
+                className="w-full h-full object-cover"
+              />
+            </div>
           )}
 
-          {/* Content */}
           <div className="p-6 sm:p-8 w-full">
-            {/* Author Info */}
             <div className="flex items-center mb-6">
               <div className="flex items-center">
                 <img
@@ -119,17 +119,18 @@ const Post = () => {
                   </div>
                 </div>
               </div>
-              {/* Delete Button */}
-              <button
-                onClick={() => setShowModal(true)} // Open the modal
-                className="ml-auto text-gray-400 hover:text-red-500 transition-colors"
-                aria-label="Delete post"
-              >
-                <Trash2 className="w-6 h-6" />
-              </button>
+              {/* Conditionally render delete button */}
+              {isOwner && (
+                <button
+                  onClick={() => setShowModal(true)}
+                  className="ml-auto text-gray-400 hover:text-red-500 transition-colors"
+                  aria-label="Delete post"
+                >
+                  <Trash2 className="w-6 h-6" />
+                </button>
+              )}
             </div>
 
-            {/* Title and Description */}
             <div className="prose prose-invert mb-4 max-w-[60rem]">
               <ReactMarkdown className="w-full text-gray-200 sm:text-2xl font-bold leading-none">
                 {post.title}
@@ -140,7 +141,6 @@ const Post = () => {
               {post.description}
             </ReactMarkdown>
 
-            {/* Interaction Buttons */}
             <div className="flex items-center space-x-6 pt-6">
               <button className="flex items-center text-gray-300 hover:text-red-500 transition-colors">
                 <Heart className="w-6 h-6 mr-2" />
@@ -158,7 +158,6 @@ const Post = () => {
           </div>
         </div>
 
-        {/* Comments Section - Placeholder */}
         <div className="mt-8 bg-zinc-900 rounded-xl shadow-sm p-6 sm:p-8">
           <h2 className="text-2xl font-bold text-gray-100 mb-6">Comments</h2>
           {post.comments.length === 0 ? (
@@ -173,7 +172,6 @@ const Post = () => {
         </div>
       </div>
 
-      {/* Modal for Delete Confirmation */}
       {showModal && (
         <div className="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-50">
           <div className="bg-zinc-950 rounded-lg p-6 w-1/4 h-40 flex flex-col justify-between">
@@ -181,7 +179,7 @@ const Post = () => {
               Are you sure you want to delete this post?
             </h2>
             {deleteError && (
-              <div className="text-red-500 text-sm mb-2">{deleteError}</div> // Display the error message
+              <div className="text-red-500 text-sm mb-2">{deleteError}</div>
             )}
             <div className="flex flex-row-reverse justify-start gap-2">
               <button

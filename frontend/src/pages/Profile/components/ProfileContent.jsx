@@ -1,4 +1,4 @@
-import { PenLine } from "lucide-react";
+import { Loader2, PenLine } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -63,7 +63,7 @@ export const ProfileContent = () => {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-16 text-zinc-400">
-        <p>Loading profile...</p>
+        <Loader2 className="h-6 w-6 animate-spin" />
       </div>
     );
   }

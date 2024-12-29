@@ -11,6 +11,9 @@ import { Profile } from "./pages/Profile/Profile";
 import Post from "./pages/Post Page/Post";
 import { EditProfile } from "./pages/Edit Page/EditProfile";
 import CreatePost from "./pages/Create Post/CreatePost";
+import MakeBond from "./pages/Make Bonds/MakeBond";
+
+import UserProfilePage from "./pages/User Profile/UserProfile";
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(null); // Start with `null` for an unresolved state
@@ -53,7 +56,7 @@ const App = () => {
           <Route
             index
             element={
-              isAuthenticated ? <Home /> : <Navigate to="/login" replace />
+              <Home />  
             }
           />
           <Route
@@ -89,6 +92,18 @@ const App = () => {
             path="create"
             element={
               isAuthenticated ? <CreatePost /> : <Navigate to="/login" replace />
+            }
+          />
+          <Route
+            path="make-bonds"
+            element={
+              isAuthenticated ? <MakeBond /> : <Navigate to="/login" replace />
+            }
+          />
+          <Route
+            path="profile/:id"
+            element={
+              isAuthenticated ? <UserProfilePage /> : <Navigate to="/login" replace />
             }
           />
         </Route>

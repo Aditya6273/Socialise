@@ -27,6 +27,7 @@
     "react-hot-toast": "^2.4.1",
     "react-markdown": "^9.0.1",
     "react-router-dom": "^7.1.0",
+    "react-scroll": "^1.9.0",
     "Socialise": "file:..",
     "tailwind-merge": "^2.5.5",
     "tailwindcss-animate": "^1.0.7",

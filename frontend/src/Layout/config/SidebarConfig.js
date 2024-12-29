@@ -26,7 +26,7 @@ export const sidebarConfig = [
     submenu: [
       { title: 'Chat', icon: MessageSquare ,path: '/chat' },
       { title: 'Notifications', icon: Bell ,path: "/notifications" },
-      { title: 'Bonds', icon: Users , path: "/bonds" },
+      { title: 'Make Bonds', icon: Users , path: "/make-bonds" },
     ]
   },
   {

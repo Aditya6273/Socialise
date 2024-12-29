@@ -47,15 +47,11 @@ export const makeBond = async (req, res) => {
       // Remove the bond
       await User.findByIdAndUpdate(userId, { $pull: { bondings: friendId } });
       await User.findByIdAndUpdate(friendId, { $pull: { bonds: userId } });
+      const updatedLoggedInUser = await User.findById(userId); // Refetch full data
 
       return res.status(200).json({
         message: "Bond removed successfully",
-        loggedInUser: {
-          _id: loggedInUser._id,
-          bondings: loggedInUser.bondings.filter(
-            (id) => id.toString() !== friendId
-          ),
-        },
+        loggedInUser: updatedLoggedInUser,
       });
     } else {
       // Add the bond
@@ -63,13 +59,11 @@ export const makeBond = async (req, res) => {
         $addToSet: { bondings: friendId },
       });
       await User.findByIdAndUpdate(friendId, { $addToSet: { bonds: userId } });
+      const updatedLoggedInUser = await User.findById(userId); // Refetch full data
 
       return res.status(200).json({
         message: "Bond made successfully",
-        loggedInUser: {
-          _id: loggedInUser._id,
-          bondings: [...loggedInUser.bondings, friendId],
-        },
+        loggedInUser: updatedLoggedInUser,
       });
     }
   } catch (error) {
@@ -77,6 +71,7 @@ export const makeBond = async (req, res) => {
     return res.status(500).json({ message: "An error occurred" });
   }
 };
+
 
 export const getBondings = async (req, res, next) => {
   try {
@@ -108,11 +103,36 @@ export const getBonds = async (req, res, next) => {
 export const getUser = async (req, res, next) => {
   try {
     const userId = req.params.id;
-    const user = await User.findById(userId).select("-password");
+    const user = await User.findById(userId).select("-password").populate("posts");
 
     return res.status(200).json({ user });
   } catch (error) {
     console.error(error);
     next(error);
+  }
+};
+
+export const getAllUsers = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    if (!userId) {
+      return res.status(400).json({ message: "User not Authorized" });
+    }
+
+
+    const loggedInUser = await User.findById(userId);
+    if (!loggedInUser) {
+      return res.status(404).json({ message: "Logged-in user not found" });
+    }
+
+   
+    const users = await User.find({
+      _id: { $ne: userId  },
+    }).select("-password");
+
+    return res.status(200).json({ users });
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    return res.status(500).json({ message: "Internal Server Error" });
   }
 };
