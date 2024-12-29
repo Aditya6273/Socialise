@@ -14,18 +14,20 @@ export const Register = async (req, res) => {
       req.body;
 
     if (!firstName || !lastName || !email || !password || !username) {
-      return res.status(400).json("All fields are required");
+      return res.status(400).json({message:"All fields are required"});
     }
 
     if (!validator.isEmail(email)) {
-      return res.status(400).json("Invalid Email");
+      return res.status(400).json({message: "Invalid email"});
     }
 
     if (!validator.isStrongPassword(password)) {
       return res
         .status(400)
         .json(
-          "Password must be at least 8 characters, 1 uppercase, 1 lowercase, 1 number and 1 special character"
+          {
+            message: "Password must be at least 8 characters, 1 uppercase, 1 lowercase, 1 number and 1 special character"
+          }
         );
     }
 
@@ -68,25 +70,25 @@ export const Login = async (req, res, next) => {
     const { email, password } = req.body;
 
     if (!email || !password) {
-      return res.status(400).json("Email and password are required");
+      return res.status(400).json({message: "Invalid email or password"});
     }
 
     if (!validator.isEmail(email)) {
-      return res.status(400).json("Invalid Email");
+      return res.status(400).json({message: "Invalid email"});
     }
 
     // Check if the user exists
     const user = await User.findOne({ email: email }).select("+password");
 
     if (!user) {
-      return res.status(400).json("Invalid credentials");
+      return res.status(400).json({message: "User not found"});
     }
 
     // Check if the password is correct
     const isMatch = await comparePassword(password, user.password);
 
     if (!isMatch) {
-      return res.status(400).json("Invalid credentials");
+      return res.status(400).json({message:"Invalid credentials"});
     }
 
     // Generate token and set in cookie
@@ -102,7 +104,7 @@ export const Logout = async (req, res, next) => {
   try {
     const token = req.cookies.token || req.headers.authorization?.split(" ")[1];
     if (!token) {
-      return res.status(401).json("No token provided");
+      return res.status(401).json({message: "Invalid token"});
     }
 
     await redis.set(token, "logout", "EX", 60 * 60 * 24); // Set expiry for 1 day

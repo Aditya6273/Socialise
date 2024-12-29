@@ -4,7 +4,7 @@ import { Card, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@radix-ui/react-label';
 import { Input } from '@/components/ui/input';
 import 'tailwindcss/tailwind.css';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useUserStore } from '@/Stores/useUserStore';
 
 const Login = () => {
@@ -13,7 +13,7 @@ const Login = () => {
     password: ''
   });
   const [error, setError] = useState(null);
-  const navigate = useNavigate();
+  
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -27,15 +27,16 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
    e.preventDefault();
-    setError(null); // Reset error state
+    setError(null); 
     try {
       const user = await login(formData);
       if (user) {
-        // Reload the page after successful login
-        navigate('/'); // Correctly navigate after successful login
+       
+        window.location.reload(); 
+        
       }
     } catch (err) {
-      setError('Invalid email or password',err); // Handle error message
+      setError('Invalid email or password',err); 
     }
   };
 

@@ -17,17 +17,16 @@ import UserProfilePage from "./pages/User Profile/UserProfile";
 import Feed from "./pages/Feed Page/Feed";
 
 const App = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(null); // Start with `null` for an unresolved state
+  const [isAuthenticated, setIsAuthenticated] = useState(null); 
 
   const { getProfile } = useUserStore();
 
-  // Fetch user profile and check authentication
   useEffect(() => {
     const fetchAuthState = async () => {
       try {
         const token = localStorage.getItem("token");
         if (token) {
-          await getProfile(); // Ensure the profile is fetched
+          await getProfile(); 
           setIsAuthenticated(true);
         } else {
           setIsAuthenticated(false);
@@ -41,7 +40,7 @@ const App = () => {
     fetchAuthState();
   }, [getProfile]);
 
-  // Show loader while determining authentication state
+
   if (isAuthenticated === null) {
     return (
       <div className="flex justify-center items-center h-screen">
