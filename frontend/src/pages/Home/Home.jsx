@@ -75,12 +75,14 @@ export default function Home() {
               Start connecting with millions of users worldwide and experience
               social networking like never before.
             </p>
+            <Link to={`${parsedUser ? "/show-bonds" : "/register"}`}>
             <Button
               size="lg"
               className="bg-gradient-to-r from-zinc-700 to-zinc-800 hover:from-zinc-600 hover:to-zinc-700 text-zinc-100 rounded-xl px-8 py-6 text-lg mt-4"
             >
-              Join Socialise Now
+             {parsedUser ? "Make Bonds" : "Join Socialise Now..."}
             </Button>
+            </Link>
           </div>
         </div>
       </div>
