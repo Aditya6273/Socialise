@@ -125,7 +125,7 @@ export const usePostStore = create((set, get) => ({
       const res = await Axios.get("/posts/get-bondings-posts");
       if (res?.data?.posts) {
         set({ posts: res.data.posts, isLoading: false });
-        console.log(res.data.posts);
+        
         return res.data.posts;
       } else {
         set({ isLoading: false, isError: true, error: "No posts found" });
