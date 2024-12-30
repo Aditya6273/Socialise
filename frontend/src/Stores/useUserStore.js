@@ -7,8 +7,8 @@ export const useUserStore = create((set) => ({
   user: JSON.parse(localStorage.getItem("user") || "null"),
   isLoading: false,
   isError: false,
+  
   error: null,
-
   signup: async (data) => {
     try {
       set({ isLoading: true });
@@ -58,8 +58,6 @@ export const useUserStore = create((set) => ({
       throw error;
     }
   },
-
-  // Logout
   logout: async () => {
     try {
       set({ isLoading: true });
@@ -85,7 +83,6 @@ export const useUserStore = create((set) => ({
     }
   },
 
-  // Fetch user profile
   getProfile: async () => {
     try {
       set({ isLoading: true });
@@ -109,7 +106,6 @@ export const useUserStore = create((set) => ({
     }
   },
 
-  // Update profile
   updateProfile: async (data) => {
     try {
       set({ isLoading: true, isError: false, error: null });
@@ -210,8 +206,6 @@ export const useUserStore = create((set) => ({
         bondings: res.data.bondings,
       });
       return res.data.bondings;
-
-
     } catch (error) {
       const errorMessage =
         error?.response?.data?.message || "An unexpected error occurred";
@@ -220,7 +214,7 @@ export const useUserStore = create((set) => ({
       throw error;
     }
   },
-  getBonds:async () => {
+  getBonds: async () => {
     try {
       set({ isLoading: true });
       const res = await Axios.get("/users/get-bonds");
@@ -230,14 +224,12 @@ export const useUserStore = create((set) => ({
         bonds: res.data.bonds,
       });
       return res.data.bonds;
-      
     } catch (error) {
       const errorMessage =
         error?.response?.data?.message || "An unexpected error occurred";
-        set({ isLoading: false, isError: true, error: errorMessage });
-        toast.error(errorMessage);
-        throw error;
-      
+      set({ isLoading: false, isError: true, error: errorMessage });
+      toast.error(errorMessage);
+      throw error;
     }
-  }
+  },
 }));

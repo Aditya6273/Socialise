@@ -6,7 +6,7 @@ import { matchesSearchTerm } from './searchUtils';
 
 const USERS_PER_PAGE = 6;
 
-export function useUserSearch() {
+export const useUserSearch = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [users, setUsers] = useState([]);
   const { getAllUnBondedUsers, isLoading } = useUserStore();
@@ -67,3 +67,4 @@ function shuffleArray(array) {
   }
   return shuffled;
 }
+

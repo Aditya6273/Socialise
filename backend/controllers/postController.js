@@ -67,10 +67,18 @@ export const getAllPosts = async (req, res) => {
 export const getPostById = async (req, res) => {
   try {
     const postId = req.params.id;
-    const post = await Post.findById(postId).populate("userId");
+
+    const post = await Post.findById(postId)
+      .populate("userId") // Populate user details associated with the post
+      .populate({
+        path: "comments",
+        populate: { path: "user", select: "firstName lastName profilePic" }, // Populate user details in comments
+      });
+
     if (!post) {
       return res.status(404).json({ message: "Post not found" });
     }
+
     return res.status(200).json({ post });
   } catch (error) {
     console.error(error);
@@ -80,6 +88,7 @@ export const getPostById = async (req, res) => {
     });
   }
 };
+
 export const deletePost = async (req, res) => {
   try {
     const postId = req.params.id;
@@ -112,7 +121,11 @@ export const deletePost = async (req, res) => {
 
     try {
       await Post.findByIdAndDelete(postId);
-      await User.findByIdAndUpdate(userId, { $pull: { posts: postId } }, { new: true });
+      await User.findByIdAndUpdate(
+        userId,
+        { $pull: { posts: postId } },
+        { new: true }
+      );
     } catch (error) {
       console.error("Error deleting post from database:", error);
       return res.status(500).json({
@@ -176,23 +189,41 @@ export const deleteAll = async (req, res) => {
 
 export const getPostOfBondingUsers = async (req, res) => {
   try {
-
     const userId = req.user._id;
 
-    const user = await User.findById(userId).select('bondings');
+    const user = await User.findById(userId).select("bondings");
     if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+      return res.status(404).json({ message: "User not found" });
     }
 
-   
     const bondings = user.bondings;
 
-  
-    const posts = await Post.find({ userId: { $in: bondings } }).populate("userId");
+    const posts = await Post.find({ userId: { $in: bondings } }).populate(
+      "userId"
+    );
 
     return res.status(200).json({ posts });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ message: 'An error occurred while fetching posts' });
+    return res
+      .status(500)
+      .json({ message: "An error occurred while fetching posts" });
+  }
+};
+
+export const getComments = async (req, res) => {
+  try {
+    const postId = req.params.postId;
+
+    const post = await Post.findById(postId).populate("comments","comments.user");
+    console.log(post);
+    if (!post) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+
+    return res.status(200).json({ comments: post.comments });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Error fetching comments" });
   }
 };

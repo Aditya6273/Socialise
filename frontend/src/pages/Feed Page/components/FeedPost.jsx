@@ -2,8 +2,6 @@
 
 import { Heart, MessageCircle, Repeat2, Share } from 'lucide-react';
 
-
-
 export function FeedPost({ username, avatar, content, timestamp, likes, comments, shares }) {
   return (
     <div className="bg-white rounded-xl p-4 mb-4 shadow-sm hover:shadow-md transition-shadow">
@@ -16,19 +14,19 @@ export function FeedPost({ username, avatar, content, timestamp, likes, comments
           </div>
           <p className="mt-2 text-gray-800">{content}</p>
           <div className="flex items-center justify-between mt-4 text-gray-500">
-            <button className="flex items-center space-x-2 hover:text-blue-500">
+            <button className="flex items-center space-x-2 hover:text-blue-500 transition-colors duration-200">
               <MessageCircle size={20} />
               <span>{comments}</span>
             </button>
-            <button className="flex items-center space-x-2 hover:text-green-500">
+            <button className="flex items-center space-x-2 hover:text-green-500 transition-colors duration-200">
               <Repeat2 size={20} />
-              <span>{shares}</span>
+              <span>{shares || 0}</span>
             </button>
-            <button className="flex items-center space-x-2 hover:text-red-500">
+            <button className="flex items-center space-x-2 hover:text-blue-500 transition-colors duration-200">
               <Heart size={20} />
               <span>{likes}</span>
             </button>
-            <button className="flex items-center space-x-2 hover:text-blue-500">
+            <button className="flex items-center space-x-2 hover:text-blue-500 transition-colors duration-200">
               <Share size={20} />
             </button>
           </div>

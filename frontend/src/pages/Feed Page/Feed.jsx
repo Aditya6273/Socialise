@@ -34,9 +34,7 @@ function Feed() {
     fetch();
   }, [fetch]);
 
-  useEffect(() => {
-    console.log(bondingPosts);
-  }, [bondingPosts]);
+
 
   if (isLoading) {
     return (
@@ -87,7 +85,7 @@ function Feed() {
             </Tabs>
           </div>
 
-          <div className="lg:col-span-1">
+          <div className="lg:col-span-1 fixed top-10 max-w-sm right-10">
             <div className="bg-zinc-800/30 rounded-lg overflow-hidden">
               <h2 className="text-lg font-semibold p-4 border-b border-zinc-700">
                 Trending Articles

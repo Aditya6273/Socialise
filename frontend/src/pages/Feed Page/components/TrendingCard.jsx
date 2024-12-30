@@ -11,13 +11,13 @@ export function TrendingCard({ post }) {
       <div className="flex space-x-4">
         <div className="flex-1 min-w-0">
           {" "}
-          {/* min-w-0 allows flex child to shrink below content size */}
-          <h3 className="font-semibold text-zinc-100 group-hover:text-blue-400 transition-colors truncate">
+          
+          <div className="font-semibold text-zinc-100 group-hover:text-blue-400 transition-colors truncate">
             <Markdown>{post.title}</Markdown>
-          </h3>
+          </div>
           <p className="text-sm text-zinc-400 mt-1 line-clamp-2">
             {" "}
-            {/* line-clamp-2 limits to 2 lines */}
+           
             {post.description?.length > 200
               ? `${post.description.slice(0, 200)}...`
               : post.descriptions}

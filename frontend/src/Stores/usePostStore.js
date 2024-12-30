@@ -142,4 +142,65 @@ export const usePostStore = create((set, get) => ({
       toast.error(errorMessage);
     }
   },
+  postComment: async (id,text) => {
+    try {
+      set({ isError: false, error: null });
+      const res = await Axios.post(`/comments/add-comment/${id}`,text);
+      const currentPosts = get().posts;
+      const updatedPosts = currentPosts.map((post) =>
+        post._id === id
+          ? { ...post, comments: [...post.comments, res.data] }
+          : post
+      );
+      set({ posts: updatedPosts, isLoading: false });
+      return res.data;
+    } catch (error) {
+      const errorMessage =
+        error.response?.data?.message || "An unexpected error occurred";
+      set({
+        isLoading: false,
+        isError: true,
+        error: errorMessage,
+      });
+      toast.error(errorMessage);
+    }
+  },
+  getCommentsOfPost: async (id) => {
+    try {
+      set({ isError: false, error: null });
+      const res = await Axios.get(`/comments/get-comments/${id}`);
+      return res.data.comments;
+    } catch (error) {
+      const errorMessage =
+        error.response?.data?.message || "An unexpected error occurred";
+      set({
+        isLoading: false,
+        isError: true,
+        error: errorMessage,
+      });
+      toast.error(errorMessage);
+    }
+  },
+  deleteComment: async (id) => {
+    try {
+      set({ isLoading: true, isError: false, error: null });
+      await Axios.delete(`/comments/delete-comment/${id}`);
+
+      const updatedPosts = get().posts.map((post) =>
+        post.comments.map((comment) =>
+          comment._id === id ? { ...comment, isDeleted: true } : comment
+        )
+      );
+      set({ posts: updatedPosts, isLoading: false });
+    } catch (error) {
+      const errorMessage =
+        error.response?.data?.message || "An unexpected error occurred";
+      set({
+        isLoading: false,
+        isError: true,
+        error: errorMessage,
+      });
+      toast.error(errorMessage);
+    }
+  },
 }));

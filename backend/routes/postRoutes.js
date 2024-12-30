@@ -1,5 +1,5 @@
 import {Router} from "express"
-import { createPost, deleteAll, deletePost, getAllPosts, getPostById, getPostOfBondingUsers } from "../controllers/postController.js";
+import { createPost, deleteAll, deletePost, getAllPosts, getComments, getPostById, getPostOfBondingUsers } from "../controllers/postController.js";
 import { checkAuth } from "../middlewares/authMiddleware.js";
 
 const router = Router();
@@ -11,6 +11,7 @@ router.get("/get-post/:id",getPostById)
 router.delete("/delete/:id",deletePost)
 router.delete("/delete-all",deleteAll)
 router.get("/get-bondings-posts",getPostOfBondingUsers)
+router.get("/get-comments/:id",getComments)
 
 
 export default router;
