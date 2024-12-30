@@ -20,7 +20,7 @@ export function UserCard({ user, isbonding, onToggleFollow }) {
         <div className="flex-1">
           <h3 className="font-semibold text-zinc-100">{fullName}</h3>
           <p className="text-sm text-zinc-400">@{user.username}</p>
-          {user.bio && <p className="text-sm text-zinc-400 mt-1">{user.bio}</p>}
+          
         </div>
         <div className="flex items-center justify-center gap-2">
           <Button
