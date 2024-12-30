@@ -112,6 +112,7 @@ export const deletePost = async (req, res) => {
 
     try {
       await Post.findByIdAndDelete(postId);
+      await User.findByIdAndUpdate(userId, { $pull: { posts: postId } }, { new: true });
     } catch (error) {
       console.error("Error deleting post from database:", error);
       return res.status(500).json({

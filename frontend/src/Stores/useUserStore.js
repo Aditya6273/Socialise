@@ -177,19 +177,17 @@ export const useUserStore = create((set) => ({
     try {
       set({ isLoading: true });
 
-      const res = await Axios.post(`/users/make-bond/${id}`); 
+      const res = await Axios.post(`/users/make-bond/${id}`);
       const { loggedInUser, message } = res.data;
 
-   
       localStorage.setItem("user", JSON.stringify(loggedInUser));
 
-      
       set({
         isLoading: false,
         isError: false,
       });
 
-      toast.success(message); 
+      toast.success(message);
       return res.data;
     } catch (error) {
       const errorMessage =
@@ -197,8 +195,49 @@ export const useUserStore = create((set) => ({
 
       set({ isLoading: false, isError: true, error: errorMessage });
 
-      toast.error(errorMessage); 
-      throw error; 
+      toast.error(errorMessage);
+      throw error;
     }
   },
+
+  getBondings: async () => {
+    try {
+      set({ isLoading: true });
+      const res = await Axios.get("/users/get-bondings");
+      set({
+        isLoading: false,
+        isError: false,
+        bondings: res.data.bondings,
+      });
+      return res.data.bondings;
+
+
+    } catch (error) {
+      const errorMessage =
+        error?.response?.data?.message || "An unexpected error occurred";
+      set({ isLoading: false, isError: true, error: errorMessage });
+      toast.error(errorMessage);
+      throw error;
+    }
+  },
+  getBonds:async () => {
+    try {
+      set({ isLoading: true });
+      const res = await Axios.get("/users/get-bonds");
+      set({
+        isLoading: false,
+        isError: false,
+        bonds: res.data.bonds,
+      });
+      return res.data.bonds;
+      
+    } catch (error) {
+      const errorMessage =
+        error?.response?.data?.message || "An unexpected error occurred";
+        set({ isLoading: false, isError: true, error: errorMessage });
+        toast.error(errorMessage);
+        throw error;
+      
+    }
+  }
 }));

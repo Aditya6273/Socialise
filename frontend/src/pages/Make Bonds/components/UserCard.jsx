@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import { Link } from "react-router-dom";
 import { UserIcon, UserPlus, Mail, Sparkles, ExternalLink } from "lucide-react";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -23,11 +23,8 @@ export function UserCard({ user, isBonded, onBondClick }) {
       <div className="p-6">
         <div className="flex items-start gap-4">
           <Avatar className="h-16 w-16 ring-2 ring-primary/10 ring-offset-2 ring-offset-background">
-            <img src={user.profilePic || "/default_profile_pic.jpeg"} alt="" />
-            <AvatarFallback className="bg-gradient-to-br from-primary/20 to-secondary/20 text-lg">
-              {user.firstName?.[0]}
-              {user.lastName?.[0]}
-            </AvatarFallback>
+            <img className="w-full h-full object-cover" src={user.profilePic || "/default_profile_pic.jpeg"} alt="" />
+        
           </Avatar>
           <div className="flex-1 space-y-2">
             <div className="flex items-center justify-between">

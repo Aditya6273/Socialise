@@ -15,53 +15,24 @@ const shuffleArray = (array) => {
 };
 
 function Feed() {
-  
-  const trendingArticles = [
-    {
-      title: "The Future of AI Development",
-      description:
-        "New breakthroughs in machine learning are changing how we code",
-      imageUrl:
-        "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=150",
-      link: "#",
-    },
-    {
-      title: "Web Development Trends 2024",
-      description: "Top frameworks and tools developers are using this year",
-      imageUrl:
-        "https://images.unsplash.com/photo-1627398242454-45a1465c2479?w=150",
-      link: "#",
-    },
-    {
-      title: "The Rise of Edge Computing",
-      description: "How edge computing is revolutionizing web performance",
-      imageUrl:
-        "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=150",
-      link: "#",
-    },
-  ];
-
   const [fetchedPosts, setFetchedPosts] = useState([]);
   const [bondingPosts, setBondingPosts] = useState([]);
   const { getAllPosts, isLoading, getBondingsPosts } = usePostStore();
-
 
   const fetch = useCallback(async () => {
     try {
       const res = await getAllPosts();
       const bondingRes = await getBondingsPosts();
-      setFetchedPosts(shuffleArray(res)); 
-      setBondingPosts(shuffleArray(bondingRes)); 
+      setFetchedPosts(shuffleArray(res));
+      setBondingPosts(shuffleArray(bondingRes));
     } catch (error) {
       console.error("Error fetching posts:", error);
     }
   }, [getAllPosts, getBondingsPosts]);
 
-
   useEffect(() => {
     fetch();
   }, [fetch]);
-
 
   useEffect(() => {
     console.log(bondingPosts);
@@ -106,7 +77,8 @@ function Feed() {
                   ) : (
                     <div className="flex justify-center items-center min-h-[200px]">
                       <p className="text-center text-2xl my-auto">
-                        No bonding posts found. Make a bond with someone to see posts here!
+                        No bonding posts found. Make a bond with someone to see
+                        posts here!
                       </p>
                     </div>
                   )}
@@ -115,15 +87,14 @@ function Feed() {
             </Tabs>
           </div>
 
-         
           <div className="lg:col-span-1">
             <div className="bg-zinc-800/30 rounded-lg overflow-hidden">
               <h2 className="text-lg font-semibold p-4 border-b border-zinc-700">
                 Trending Articles
               </h2>
               <div className="divide-y divide-zinc-700">
-                {trendingArticles.map((article, index) => (
-                  <TrendingCard key={index} {...article} />
+                {fetchedPosts.splice(0, 3).map((post, index) => (
+                  <TrendingCard key={index} post={post} />
                 ))}
               </div>
             </div>

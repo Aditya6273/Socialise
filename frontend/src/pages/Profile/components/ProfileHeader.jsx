@@ -11,7 +11,7 @@ export const ProfileHeader = () => {
   return (
     <div className="relative">
       {/* Cover Image */}
-      <div className="h-80 overflow-hidden">
+      <div className="h-80  overflow-hidden">
         <img
           src={parsedUser.coverImg ? parsedUser.coverImg : "/default_cover_img.jpeg"}
           alt="Cover"
@@ -24,7 +24,7 @@ export const ProfileHeader = () => {
         <div className="max-w-6xl mx-auto">
           <div className="flex justify-between items-end">
             <div className="flex gap-6 items-end">
-              <Avatar className="h-40 w-40 border-4 border-zinc-900">
+              <Avatar className="h-44 w-44 border-4 border-zinc-900">
                 <AvatarImage src={parsedUser.profilePic ? parsedUser.profilePic : "/default_profile_pic.jpeg"} alt={parsedUser.firstName + " " + parsedUser.lastName} />
                 <AvatarFallback>{parsedUser.firstName.charAt(0)}</AvatarFallback>
               </Avatar>

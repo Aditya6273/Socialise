@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@radix-ui/react-label';
 import { Input } from '@/components/ui/input';
-import 'tailwindcss/tailwind.css';
+
 import { Link } from 'react-router-dom';
 import { useUserStore } from '@/Stores/useUserStore';
 

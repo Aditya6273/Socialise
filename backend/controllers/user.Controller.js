@@ -93,7 +93,7 @@ export const getBonds = async (req, res, next) => {
       .select("-password")
       .populate("bonds");
 
-    return res.status(200).json({ bondings: user.bonds });
+    return res.status(200).json({ bonds: user.bonds });
   } catch (error) {
     console.error(error);
     next(error);

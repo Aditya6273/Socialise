@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import Markdown from "react-markdown";
 
 export const PostCard = ({ post, onDeleteClick }) => {
   return (
@@ -30,7 +31,7 @@ export const PostCard = ({ post, onDeleteClick }) => {
           <div className="flex justify-between items-start">
             <div className="space-y-1">
               <CardTitle className="text-lg text-zinc-100 line-clamp-1">
-                {post.title}
+                <Markdown>{post.title}</Markdown>
               </CardTitle>
               <CardDescription className="text-zinc-400 text-sm">
                 {post.date}

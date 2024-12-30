@@ -15,6 +15,7 @@ import MakeBond from "./pages/Make Bonds/MakeBond";
 
 import UserProfilePage from "./pages/User Profile/UserProfile";
 import Feed from "./pages/Feed Page/Feed";
+import BondPage from "./pages/Bonds Page/BondPage";
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(null); 
@@ -110,6 +111,12 @@ const App = () => {
             path="feed"
             element={
               isAuthenticated ? <Feed /> : <Navigate to="/login" replace />
+            }
+          />
+          <Route
+            path="show-bonds"
+            element={
+              isAuthenticated ? <BondPage /> : <Navigate to="/login" replace />
             }
           />
         </Route>
