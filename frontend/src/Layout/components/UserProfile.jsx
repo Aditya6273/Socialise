@@ -16,7 +16,7 @@ export default function UserProfile() {
   return (
     <div className={cn("border-t border-white/10 p-2 flex items-center gap-2")}>
       <img
-        src={pic}
+        src={pic ? pic : "/default_profile_pic.jpeg" }
         alt="Profile"
         className="w-8 h-8 rounded-full"
       />

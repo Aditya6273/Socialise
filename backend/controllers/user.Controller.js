@@ -1,5 +1,5 @@
 import { User } from "../models/userModel.js";
-
+import Post from "../models/postModel.js";
 export const getUserPosts = async (req, res, next) => {
   try {
     const userId = req.user._id;
@@ -72,7 +72,6 @@ export const makeBond = async (req, res) => {
   }
 };
 
-
 export const getBondings = async (req, res, next) => {
   try {
     const userId = req.user._id;
@@ -103,7 +102,9 @@ export const getBonds = async (req, res, next) => {
 export const getUser = async (req, res, next) => {
   try {
     const userId = req.params.id;
-    const user = await User.findById(userId).select("-password").populate("posts");
+    const user = await User.findById(userId)
+      .select("-password")
+      .populate("posts");
 
     return res.status(200).json({ user });
   } catch (error) {
@@ -119,15 +120,13 @@ export const getAllUsers = async (req, res) => {
       return res.status(400).json({ message: "User not Authorized" });
     }
 
-
     const loggedInUser = await User.findById(userId);
     if (!loggedInUser) {
       return res.status(404).json({ message: "Logged-in user not found" });
     }
 
-   
     const users = await User.find({
-      _id: { $ne: userId  },
+      _id: { $ne: userId },
     }).select("-password");
 
     return res.status(200).json({ users });
@@ -136,3 +135,7 @@ export const getAllUsers = async (req, res) => {
     return res.status(500).json({ message: "Internal Server Error" });
   }
 };
+
+
+
+

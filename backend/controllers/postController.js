@@ -215,7 +215,10 @@ export const getComments = async (req, res) => {
   try {
     const postId = req.params.postId;
 
-    const post = await Post.findById(postId).populate("comments","comments.user");
+    const post = await Post.findById(postId).populate(
+      "comments",
+      "comments.user"
+    );
     console.log(post);
     if (!post) {
       return res.status(404).json({ message: "Post not found" });
@@ -227,3 +230,77 @@ export const getComments = async (req, res) => {
     return res.status(500).json({ message: "Error fetching comments" });
   }
 };
+// Like and Unlike Post
+export const likeAndUnlikePost = async (req, res) => {
+  try {
+    const postId = req.params.id;
+    const userId = req.user?._id;
+
+    if (!userId) {
+      return res.status(401).json({ message: "Unauthorized access" });
+    }
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const post = await Post.findById(postId);
+    if (!post) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+
+    const isLiked = post.likes.includes(userId);
+
+   
+    if (isLiked) {
+  
+      post.likes.pull(userId);
+
+     
+      user.likes.pull(postId);
+    } else {
+      
+      post.likes.push(userId);
+
+      if (!user.likes) user.likes = []; 
+      user.likes.push(postId);
+    }
+
+    
+    await post.save();
+    await user.save();
+
+   
+    const updatedPost = await Post.findById(postId).populate("likes");
+
+    return res.status(200).json({
+      message: isLiked
+        ? "Post unliked successfully"
+        : "Post liked successfully",
+      post: updatedPost,
+    });
+  } catch (error) {
+    console.error("Error in likeAndUnlikePost:", error.message);
+    return res.status(500).json({ message: "An error occurred" });
+  }
+};
+
+
+// Get Likes of a Post
+export const getLikesOfPost = async (req, res) => {
+  try {
+    const postId = req.params.id;
+
+    const post = await Post.findById(postId)
+    if (!post) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+
+    return res.status(200).json({ likes: post.likes });
+  } catch (error) {
+    console.error("Error in getLikesOfPost:", error.message);
+    return res.status(500).json({ message: "An error occurred" });
+  }
+};
+

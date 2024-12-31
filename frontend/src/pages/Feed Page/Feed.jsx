@@ -5,6 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useCallback, useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
 
+
 const shuffleArray = (array) => {
   const shuffledArray = [...array];
   for (let i = shuffledArray.length - 1; i > 0; i--) {
@@ -33,8 +34,6 @@ function Feed() {
   useEffect(() => {
     fetch();
   }, [fetch]);
-
-
 
   if (isLoading) {
     return (
@@ -91,7 +90,7 @@ function Feed() {
                 Trending Articles
               </h2>
               <div className="divide-y divide-zinc-700">
-                {fetchedPosts.splice(0, 3).map((post, index) => (
+                {fetchedPosts.slice(0, 3).map((post, index) => (
                   <TrendingCard key={index} post={post} />
                 ))}
               </div>

@@ -12,4 +12,5 @@ router.get("/get-bonds",getBonds)
 router.get("/get-user/:id",getUser)
 router.get("/all-users",getAllUsers)
 
+
 export default router;

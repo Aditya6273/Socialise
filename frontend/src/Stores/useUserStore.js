@@ -3,11 +3,9 @@ import toast from "react-hot-toast";
 import { create } from "zustand";
 
 export const useUserStore = create((set) => ({
-  // Initialize user from localStorage
   user: JSON.parse(localStorage.getItem("user") || "null"),
   isLoading: false,
   isError: false,
-  
   error: null,
   signup: async (data) => {
     try {
@@ -232,4 +230,6 @@ export const useUserStore = create((set) => ({
       throw error;
     }
   },
+
+  
 }));

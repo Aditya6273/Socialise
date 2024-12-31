@@ -2,10 +2,19 @@
 import { PostHeader } from "./PostHeader";
 import { PostContent } from "./PostContent";
 import { PostActions } from "./PostActions";
+import { useLikes } from "../hooks/useLikes";
 
-export function PostCard({ post }) {
+export function PostCard({ post  }) {
   const user = JSON.parse(localStorage.getItem("user") || "null");
   const isOwner = user?._id === post?.userId._id;
+    const {
+      likes,
+      hasLiked,
+      handleLikeUnlike,
+      likesCount,
+      likesLoading
+    } = useLikes(post._id, post?.likes || []);
+   
   return (
     <article className="p-4 border-b border-zinc-800 hover:bg-zinc-900/50 transition-colors">
       <div className="space-y-4">
@@ -21,9 +30,13 @@ export function PostCard({ post }) {
           image={post.image}
         />
         <PostActions
+    
+          likesLoading={likesLoading}
           postId={post._id}
-          commentCount={post.comments?.length || 0}
-          likeCount={post.likes?.length || 0}
+          commentsCount={post.comments?.length || 0}
+          likesCount={likesCount}
+          hasLiked={hasLiked}
+          onLikeClick={handleLikeUnlike}
         />
       </div>
     </article>

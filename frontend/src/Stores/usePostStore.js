@@ -25,7 +25,7 @@ export const usePostStore = create((set, get) => ({
     }
   },
   getPostById: async (id) => {
-    set({ isLoading: true, isError: false, error: null });
+    set({ isError: false, error: null });
     try {
       const res = await Axios.get(`/posts/get-post/${id}`);
       const post = res.data.post;
@@ -42,7 +42,7 @@ export const usePostStore = create((set, get) => ({
       localStorage.setItem("user", JSON.stringify(updatedUser));
 
       // Show success notification
-      toast.success("Post fetched successfully");
+     
 
       return post;
     } catch (error) {
@@ -125,7 +125,7 @@ export const usePostStore = create((set, get) => ({
       const res = await Axios.get("/posts/get-bondings-posts");
       if (res?.data?.posts) {
         set({ posts: res.data.posts, isLoading: false });
-        
+
         return res.data.posts;
       } else {
         set({ isLoading: false, isError: true, error: "No posts found" });
@@ -142,10 +142,10 @@ export const usePostStore = create((set, get) => ({
       toast.error(errorMessage);
     }
   },
-  postComment: async (id,text) => {
+  postComment: async (id, text) => {
     try {
       set({ isError: false, error: null });
-      const res = await Axios.post(`/comments/add-comment/${id}`,text);
+      const res = await Axios.post(`/comments/add-comment/${id}`, text);
       const currentPosts = get().posts;
       const updatedPosts = currentPosts.map((post) =>
         post._id === id
@@ -197,6 +197,57 @@ export const usePostStore = create((set, get) => ({
         error.response?.data?.message || "An unexpected error occurred";
       set({
         isLoading: false,
+        isError: true,
+        error: errorMessage,
+      });
+      toast.error(errorMessage);
+    }
+  },
+  likeAndUnlikePost: async (id) => {
+    try {
+      set({ isError: false, error: null });
+
+      const res = await Axios.post(`/posts/like/${id}`);
+      const { message, post } = res.data;
+
+      const currentPosts = get().posts;
+      const updatedPosts = currentPosts.map((p) =>
+        p._id === post._id ? post : p
+      );
+
+      set({
+        posts: updatedPosts,
+        isLoading: false,
+        isError: false,
+      });
+
+      toast.success(message);
+
+      return post;
+    } catch (error) {
+      const errorMessage =
+        error?.response?.data?.message || "An unexpected error occurred";
+
+      set({
+     
+        isError: true,
+        error: errorMessage,
+      });
+
+      toast.error(errorMessage);
+      throw error;
+    }
+  },
+  getLikesOfPost: async (id) => {
+    try {
+      set({ isError: false, error: null });
+      const res = await Axios.get(`/posts/get-likes/${id}`);
+      return res.data.likes;
+    } catch (error) {
+      const errorMessage =
+        error?.response?.data?.message || "An unexpected error occurred";
+      set({
+       
         isError: true,
         error: errorMessage,
       });
